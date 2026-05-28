@@ -50,12 +50,18 @@
     .member-name { font-size: 13px; font-weight: 500; }
     .member-role { font-size: 11px; color: var(--text2); margin-top: 2px; }
 
+    /* Search Bar */
+    .search-bar { display: flex; align-items: center; gap: 8px; background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 8px 12px; margin-bottom: 1rem; }
+    .search-bar i { color: var(--text2); font-size: 16px; }
+    .search-bar input { flex: 1; background: transparent; border: none; font-family: 'Cairo', sans-serif; font-size: 13px; color: var(--text); outline: none; }
+    .search-bar input::placeholder { color: var(--text3); }
+
     /* Filters */
     .type-toggle { display: flex; gap: 8px; margin-bottom: 1rem; }
-    .type-btn { flex: 1; padding: 6px; border: 0.5px solid var(--border); border-radius: var(--radius); font-family: 'Cairo', sans-serif; font-size: 13px; cursor: pointer; background: var(--bg2); color: var(--text2); transition: all 0.2s; }
+    .type-btn { flex: 1; padding: 6px; border: 0.5px solid var(--border); border-radius: var(--radius); font-family: 'Cairo', sans-serif; font-size: 13px; cursor: pointer; background: var(--bg2); color: var(--text2); }
     .type-btn.active { background: #00664F; color: #fff; border-color: #00664F; }
     .filter-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1rem; }
-    .filter-btn { background: var(--bg2); border: 0.5px solid var(--border); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-family: 'Cairo', sans-serif; color: var(--text2); cursor: pointer; transition: all 0.2s; }
+    .filter-btn { background: var(--bg2); border: 0.5px solid var(--border); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-family: 'Cairo', sans-serif; color: var(--text2); cursor: pointer; }
     .filter-btn.active { background: #00664F; color: #fff; border-color: #00664F; }
 
     /* Table */
@@ -66,7 +72,7 @@
     .badge-done{background:#E1F5EE;color:#0F6E56} .badge-prog{background:#E6F1FB;color:#185FA5}
     .badge-pend{background:#F1EFE8;color:#5F5E5A} .badge-pm{background:#EEEDFE;color:#534AB7}
     .badge-cm{background:#FAEEDA;color:#BA7517}
-    .close-btn { background:#E1F5EE; border:0.5px solid #9FE1CB; color:#0F6E56; border-radius:var(--radius); padding:4px 10px; font-size:12px; font-family:'Cairo',sans-serif; cursor:pointer; transition:all 0.2s; }
+    .close-btn { background:#E1F5EE; border:0.5px solid #9FE1CB; color:#0F6E56; border-radius:var(--radius); padding:4px 10px; font-size:12px; font-family:'Cairo',sans-serif; cursor:pointer; transition:0.2s; }
     .close-btn:hover { background:#0F6E56; color:#fff; }
     .lock-btn { background:#F1EFE8; border:0.5px solid #D3D1C7; color:#5F5E5A; border-radius:var(--radius); padding:4px 10px; font-size:12px; font-family:'Cairo',sans-serif; cursor:pointer; }
     .closed-btn { background:var(--bg2); border:0.5px solid var(--border); color:var(--text3); border-radius:var(--radius); padding:4px 10px; font-size:12px; font-family:'Cairo',sans-serif; cursor:default; }
@@ -79,7 +85,7 @@
     .modal { background:#fff; border:0.5px solid var(--border); border-radius:var(--radius-lg); padding:1.5rem; width:300px; max-width:90vw; }
     .modal h3 { font-size:16px; font-weight:500; margin-bottom:4px; }
     .modal p { font-size:12px; color:var(--text2); margin-bottom:16px; }
-    .modal input { width:100%; padding:8px 12px; border:0.5px solid var(--border2); border-radius:var(--radius); font-family:'Cairo',sans-serif; font-size:14px; margin-bottom:8px; text-align:center; letter-spacing:4px; }
+    .modal input { width:100%; padding:8px 12px; border:0.5px solid var(--border2); border-radius:var(--radius); font-family:'Cairo',sans-serif; font-size:14px; margin-bottom:8px; text-align:center; }
     .modal input:focus { outline:none; border-color:#00664F; }
     .modal-err { font-size:12px; color:#A32D2D; margin-bottom:10px; min-height:16px; text-align:center; }
     .modal-btns { display:flex; gap:8px; }
@@ -87,7 +93,7 @@
     .btn-cancel { flex:1; background:var(--bg2); color:var(--text2); border:0.5px solid var(--border); border-radius:var(--radius); padding:8px; font-family:'Cairo',sans-serif; font-size:13px; cursor:pointer; }
 
     /* Toast */
-    .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(40px); background:#0F6E56; color:#fff; padding:8px 20px; border-radius:20px; font-size:13px; font-family:'Cairo',sans-serif; opacity:0; transition:all 0.3s; pointer-events:none; z-index:99; }
+    .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(40px); background:#0F6E56; color:#fff; padding:8px 20px; border-radius:20px; font-size:13px; font-family:'Cairo',sans-serif; opacity:0; transition:0.3s; z-index:100; }
     .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 
     .footer { font-size:11px; color:var(--text3); text-align:center; padding-top:1rem; border-top:0.5px solid var(--border); }
@@ -149,6 +155,13 @@
 
   <!-- Tasks -->
   <div class="section-title" style="margin-top:1rem;"><i class="ti ti-clipboard-list"></i> المهام</div>
+  
+  <!-- Search Bar -->
+  <div class="search-bar">
+    <i class="ti ti-search"></i>
+    <input type="text" id="search-input" placeholder="ابحث عن المهام أو الموظفين..." onkeyup="onSearchChange()"/>
+  </div>
+
   <div class="type-toggle">
     <button class="type-btn active" onclick="filterType('all',this)">الكل</button>
     <button class="type-btn" onclick="filterType('PM',this)">PM</button>
@@ -188,7 +201,7 @@
 const ADMIN_PASS = "aramco2025";
 let isAdmin = false;
 let pendingTaskId = null;
-let currentType = "all", currentStatus = "all";
+let currentType = "all", currentStatus = "all", currentSearch = "";
 
 const members = [
   { name:"Yahya",   initials:"YA", avClass:"av-green",  role:"Team Lead"  },
@@ -328,10 +341,16 @@ function renderTeam() {
   }).join("");
 }
 
+function onSearchChange() {
+  currentSearch = document.getElementById("search-input").value.toLowerCase();
+  renderTasks();
+}
+
 function renderTasks() {
   const filtered = tasks.filter(t =>
     (currentType === "all" || t.type === currentType) &&
-    (currentStatus === "all" || t.status === currentStatus)
+    (currentStatus === "all" || t.status === currentStatus) &&
+    (currentSearch === "" || t.title.toLowerCase().includes(currentSearch) || t.owner.toLowerCase().includes(currentSearch))
   );
   document.getElementById("tasks-body").innerHTML = filtered.map(t => {
     const isDone = t.status === "done";
