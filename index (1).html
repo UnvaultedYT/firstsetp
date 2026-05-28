@@ -192,8 +192,8 @@ let currentType = "all", currentStatus = "all";
 
 const members = [
   { name:"Yahya",   initials:"YA", avClass:"av-green",  role:"Team Lead"  },
-  { name:"Abdulla", initials:"AB", avClass:"av-blue",   role:"PM"         },
-  { name:"Ahmed",   initials:"AH", avClass:"av-amber",  role:"CM"         },
+  { name:"Abdulla", initials:"AB", avClass:"av-blue",   role:"Engineer"         },
+  { name:"Ahmed",   initials:"AH", avClass:"av-amber",  role:"Technician"         },
   { name:"Ali",     initials:"AL", avClass:"av-coral",  role:"Engineer"   },
   { name:"Mohamd",  initials:"MO", avClass:"av-purple", role:"Technician" }
 ];
@@ -217,8 +217,8 @@ const tasks = [
   { id:16, title:"Emergency Repair",       owner:"Mohamd",  type:"CM", status:"pending"  },
   { id:17, title:"Inventory Check",        owner:"Abdulla", type:"PM", status:"pending"  },
   { id:18, title:"Vendor Coordination",    owner:"Abdulla", type:"PM", status:"progress" },
-  { id:19, title:"Compressor Maintenance", owner:"Ahmed",   type:"CM", status:"pending"  },
-  { id:20, title:"Risk Assessment",        owner:"Yahya",   type:"PM", status:"progress" }
+  { id:19, title:"Compressor Maintenance", owner:"Ahmed",   type:"CM", status:"done"  },
+  { id:20, title:"Risk Assessment",        owner:"Yahya",   type:"PM", status:"done" }
 ];
 
 function showToast(msg) {
