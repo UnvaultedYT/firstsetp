@@ -129,13 +129,11 @@
   <div class="team-grid" id="team-grid"></div>
 
   <div class="section-title" style="margin-top:1rem;"><i class="ti ti-clipboard-list"></i> المهام</div>
-
   <div class="search-bar">
     <i class="ti ti-search"></i>
     <input type="text" id="search-input" placeholder="ابحث عن المهام أو الموظفين..." oninput="onSearchChange()"/>
     <button id="clear-search-btn" onclick="clearSearch()" style="display:none;background:none;border:none;cursor:pointer;color:var(--text3);font-size:16px;padding:0 2px;"><i class="ti ti-x"></i></button>
   </div>
-
   <div class="type-toggle">
     <button class="type-btn active" onclick="filterType('all',this)">الكل</button>
     <button class="type-btn" onclick="filterType('PM',this)">PM</button>
@@ -172,8 +170,7 @@
 
 <script>
 const ADMIN_PASS = "aramco2025";
-let isAdmin = false;
-let pendingTaskId = null;
+let isAdmin = false, pendingTaskId = null;
 let currentType = "all", currentStatus = "all", currentSearch = "";
 
 const members = [
@@ -209,37 +206,25 @@ const tasks = [
 
 function showToast(msg) {
   const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.classList.add("show");
+  t.textContent = msg; t.classList.add("show");
   setTimeout(() => t.classList.remove("show"), 2500);
 }
 
 function updateAdminBar() {
   document.getElementById("status-dot").className = "dot " + (isAdmin ? "dot-open" : "dot-locked");
-  document.getElementById("status-text").textContent = isAdmin
-    ? "مفتوح — بإمكانك إغلاق التاسكات"
-    : "مقفل — تحتاج صلاحية المدير لإغلاق تاسك";
-  const btn = document.getElementById("auth-toggle-btn");
-  btn.innerHTML = isAdmin
+  document.getElementById("status-text").textContent = isAdmin ? "مفتوح — بإمكانك إغلاق التاسكات" : "مقفل — تحتاج صلاحية المدير لإغلاق تاسك";
+  document.getElementById("auth-toggle-btn").innerHTML = isAdmin
     ? '<i class="ti ti-lock-open"></i> تسجيل خروج'
     : '<i class="ti ti-lock"></i> دخول المدير';
 }
 
 function toggleAuth() {
-  if (isAdmin) {
-    isAdmin = false;
-    updateAdminBar();
-    renderTasks();
-    showToast("تم تسجيل الخروج");
-  } else {
-    pendingTaskId = null;
-    openModal();
-  }
+  if (isAdmin) { isAdmin = false; updateAdminBar(); renderTasks(); showToast("تم تسجيل الخروج"); }
+  else { pendingTaskId = null; openModal(); }
 }
 
 function tryCloseTask(id) {
-  if (isAdmin) { doCloseTask(id); }
-  else { pendingTaskId = id; openModal(); }
+  if (isAdmin) { doCloseTask(id); } else { pendingTaskId = id; openModal(); }
 }
 
 function openModal() {
@@ -258,8 +243,7 @@ function confirmPass() {
   const val = document.getElementById("pass-input").value;
   if (val === ADMIN_PASS) {
     document.getElementById("modal").classList.remove("open");
-    isAdmin = true;
-    updateAdminBar();
+    isAdmin = true; updateAdminBar();
     if (pendingTaskId !== null) { doCloseTask(pendingTaskId); pendingTaskId = null; }
     else { showToast("تم تسجيل الدخول كمدير"); }
   } else {
@@ -279,13 +263,11 @@ function doCloseTask(id) {
 
 function updateStats() {
   const done = tasks.filter(t => t.status === "done").length;
-  const pmDone = tasks.filter(t => t.type === "PM" && t.status === "done").length;
-  const cmDone = tasks.filter(t => t.type === "CM" && t.status === "done").length;
   const pct = Math.round(done / tasks.length * 100);
   document.getElementById("total-count").textContent = tasks.length;
   document.getElementById("done-count").textContent = done;
-  document.getElementById("pm-done").textContent = pmDone;
-  document.getElementById("cm-done").textContent = cmDone;
+  document.getElementById("pm-done").textContent = tasks.filter(t => t.type==="PM" && t.status==="done").length;
+  document.getElementById("cm-done").textContent = tasks.filter(t => t.type==="CM" && t.status==="done").length;
   document.getElementById("pct-label").textContent = pct + "%";
   document.getElementById("main-bar").style.width = pct + "%";
 }
@@ -295,25 +277,20 @@ function renderTeam() {
   document.getElementById("team-grid").innerHTML = members.map(m => {
     const myTasks = tasks.filter(t => t.owner === m.name);
     const myDone  = myTasks.filter(t => t.status === "done").length;
-    const myPM    = tasks.filter(t => t.owner === m.name && t.type === "PM" && t.status === "done").length;
-    const myCM    = tasks.filter(t => t.owner === m.name && t.type === "CM" && t.status === "done").length;
-    const pct     = myTasks.length ? Math.round(myDone / myTasks.length * 100) : 0;
+    const myPMLeft = tasks.filter(t => t.owner === m.name && t.type === "PM" && t.status !== "done").length;
+    const myCMLeft = tasks.filter(t => t.owner === m.name && t.type === "CM" && t.status !== "done").length;
+    const pct = myTasks.length ? Math.round(myDone / myTasks.length * 100) : 0;
 
     let cardClass = "member-card";
-    if (search !== "") {
-      if (m.name.toLowerCase().includes(search)) {
-        cardClass += " highlight";
-      } else {
-        cardClass += " dimmed";
-      }
-    }
+    if (search !== "") cardClass += m.name.toLowerCase().includes(search) ? " highlight" : " dimmed";
 
     return `<div class="${cardClass}">
       <div class="avatar ${m.avClass}">${m.initials}</div>
       <div class="member-name">${m.name}</div>
       <div class="member-role">${m.role}</div>
-      <div style="font-size:12px;color:#5f5e5a;margin-top:6px;">
-        <span style="color:#534AB7">PM: ${myPM}</span> &nbsp; <span style="color:#BA7517">CM: ${myCM}</span>
+      <div style="font-size:12px;color:#5f5e5a;margin-top:6px;display:flex;justify-content:center;gap:10px;">
+        <span style="color:#534AB7">PM: ${myPMLeft}</span>
+        <span style="color:#BA7517">CM: ${myCMLeft}</span>
       </div>
       <div style="margin-top:8px;">
         <div style="display:flex;justify-content:space-between;font-size:11px;color:#9c9a92;margin-bottom:3px;">
@@ -327,18 +304,15 @@ function renderTeam() {
 
 function onSearchChange() {
   currentSearch = document.getElementById("search-input").value;
-  const clearBtn = document.getElementById("clear-search-btn");
-  clearBtn.style.display = currentSearch.length > 0 ? "block" : "none";
-  renderTasks();
-  renderTeam();
+  document.getElementById("clear-search-btn").style.display = currentSearch.length > 0 ? "block" : "none";
+  renderTasks(); renderTeam();
 }
 
 function clearSearch() {
   document.getElementById("search-input").value = "";
   currentSearch = "";
   document.getElementById("clear-search-btn").style.display = "none";
-  renderTasks();
-  renderTeam();
+  renderTasks(); renderTeam();
 }
 
 function renderTasks() {
@@ -348,30 +322,25 @@ function renderTasks() {
     (currentStatus === "all" || t.status === currentStatus) &&
     (search === "" || t.title.toLowerCase().includes(search) || t.owner.toLowerCase().includes(search))
   );
-
   if (filtered.length === 0) {
     document.getElementById("tasks-body").innerHTML =
       `<tr><td colspan="5" class="no-results"><i class="ti ti-mood-empty" style="font-size:24px;display:block;margin-bottom:8px;"></i>لا توجد نتائج مطابقة</td></tr>`;
     return;
   }
-
   document.getElementById("tasks-body").innerHTML = filtered.map(t => {
     const isDone = t.status === "done";
     const statusLabel = isDone ? "مكتملة" : t.status === "progress" ? "جارية" : "معلقة";
     const statusClass = isDone ? "badge-done" : t.status === "progress" ? "badge-prog" : "badge-pend";
+    const ownerStyle = (search !== "" && t.owner.toLowerCase().includes(search) && !t.title.toLowerCase().includes(search)) ? "font-weight:700;color:#0F6E56;" : "";
     let btn = isDone
       ? `<button class="closed-btn" disabled>مغلقة</button>`
       : isAdmin
         ? `<button class="close-btn" onclick="tryCloseTask(${t.id})"><i class="ti ti-check"></i> إغلاق</button>`
         : `<button class="lock-btn" onclick="tryCloseTask(${t.id})"><i class="ti ti-lock"></i> إغلاق</button>`;
-
-    const ownerSearch = search !== "" && t.owner.toLowerCase().includes(search) && !t.title.toLowerCase().includes(search);
-    const ownerStyle = ownerSearch ? "font-weight:700;color:#0F6E56;" : "";
-
     return `<tr class="${isDone ? "task-done" : ""}">
       <td class="task-title">${t.title}</td>
       <td style="${ownerStyle}">${t.owner}</td>
-      <td><span class="badge ${t.type === "PM" ? "badge-pm" : "badge-cm"}">${t.type}</span></td>
+      <td><span class="badge ${t.type==="PM" ? "badge-pm" : "badge-cm"}">${t.type}</span></td>
       <td><span class="badge ${statusClass}">${statusLabel}</span></td>
       <td>${btn}</td>
     </tr>`;
@@ -381,15 +350,13 @@ function renderTasks() {
 function filterType(type, btn) {
   currentType = type;
   document.querySelectorAll(".type-btn").forEach(b => b.classList.remove("active"));
-  btn.classList.add("active");
-  renderTasks();
+  btn.classList.add("active"); renderTasks();
 }
 
 function filterStatus(status, btn) {
   currentStatus = status;
   document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-  btn.classList.add("active");
-  renderTasks();
+  btn.classList.add("active"); renderTasks();
 }
 
 updateAdminBar(); renderTeam(); renderTasks(); updateStats();
